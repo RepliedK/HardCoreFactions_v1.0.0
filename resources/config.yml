@@ -1,0 +1,26 @@
+# Main config
+prefix: '&8[&aHCF&r&8] &7'
+motd: '&l&aHCF'
+
+#webhooks settings
+kills.webhook: 'https://discord.com/api/webhooks/1133913957183270943/1Lf7BL4erTx7ePIVpaGRFjrxkCRTY1zZo4mqz5wJeT_OkKAWFJh697rtcfWaUQ3gXBrc'
+koth.webhook: 'https://discord.com/api/webhooks/1133299185676988427/9sm4g-wtFDRBD1IigJ0CGRb6Rg35cbGTBTxSQtrp57wwq_VyMHBlW6vp0sT1OAHt1iz6'
+admin.webhook: 'https://discord.com/api/webhooks/1133299185676988427/9sm4g-wtFDRBD1IigJ0CGRb6Rg35cbGTBTxSQtrp57wwq_VyMHBlW6vp0sT1OAHt1iz6'
+
+# Messages
+join.message: '&7[&a+&7] &a{player}'
+quit.message: '&7[&c-&7] &c{player}'
+
+# Factions
+faction.max.members: 8
+facion.regeneration.offline: true
+
+# Scoreboard Config
+scoreboard.title: '&l&aHCF &r&7| Map1'
+scoreboard.placeholder: '---------------------'
+
+# Messages Config
+messages:
+  - "Looking for our server store? It's at &bhttps://server.store.com"
+  - "Looking for our discord server? It's at &9https://discord.gg/server"
+  - "Looking for our youtube channel? It's at &chttps://youtube.com/server"

@@ -1,0 +1,158 @@
+name: HardCoreFactions
+version: 2.0.0
+api: 5.0.0
+main: hcf\HCFLoader
+
+permissions:
+  use.player.command:
+    description: Permission nested for all player commands
+    default: true
+  blockshop.command:
+    description: Permission for /blockshop
+    default: true
+  npc.blockshop.command:
+    description: Permission for /blockshop npc
+    default: op
+  remove.npc.blockshop:
+    description: Permission for remove npc
+    default: op
+  kit.command.create:
+    description: Permission for /kit create
+    default: op
+  kit.command.delete:
+    description: Permission for /kit delete
+    default: op
+  kit.command.edit:
+    description: Permission for /kit edit
+    default: op
+  rename.command:
+    description: Permission nested for /rename
+    default: op
+  setdtr.permission:
+    description: Permission nested for /f setdtr
+    default: op
+  setstrikes.permission:
+    description: Permission nested for /f setdtr
+    default: op
+  setregentime.permission:
+    description: Permission nested for /f setregentime
+    default: op
+  forcedisband.permission:
+    description: Permission nested for /f setregentime
+    default: op
+  setpoints.permission:
+    description: Permission nested for /f setpoints
+    default: op
+  autofeed.command:
+    description: Permission nested for /feed
+    default: op
+  brewer.command:
+    description: Permission nested for /brewer
+    default: op
+  feed.command:
+    description: Permission nested for /feed
+    default: op
+  near.command:
+    description: Permission nested for /near
+    default: op
+  player.feed.command:
+    description: Permission for /feed player
+    default: op
+  god.command:
+    description: Permission nested for /god
+    default: op
+  fix.command:
+    description: Permission nested for /fix
+    default: op
+  fix.player.command:
+    description: Permission for /fix player
+    default: op
+  sotw.command:
+    description: Permission nested for /sotw
+    default: op
+  eotw.command:
+    description: Permission nested for /eotw
+    default: op
+  custom.enchant.command:
+    description: Permission nested for /customenchant
+    default: op
+  custom.enchant.command.add:
+    description: Permission for /customenchant add
+    default: op
+  custom.enchant.command.remove:
+    description: Permission for /customenchant remove
+    default: op
+  faction.command.claimfor:
+    description: Permission for /faction claimfor
+    default: op
+  koth.command:
+    description: Permission nested for /koth
+    default: op
+  koth.command.addkey:
+    description: Permission for /koth addkey
+    default: op
+  koth.command.claim:
+    description: Permission for /koth claim
+    default: op
+  koth.command.create:
+    description: Permission for /koth create
+    default: op
+  koth.command.delete:
+    description: Permission for /koth delete
+    default: op
+  koth.command.setcapzone:
+    description: Permission for /koth capzone
+    default: op
+  koth.command.setcoords:
+    description: Permission for /koth setcoords
+    default: op
+  koth.command.setpoints:
+    description: Permission for /koth setpoints
+    default: op
+  koth.command.start:
+    description: Permission for /koth start
+    default: op
+  koth.command.stop:
+    description: Permission for /koth stop
+    default: op
+  enderchest.permission:
+    description: Permission for big enderchest 
+    default: op
+  clearentities.command:
+    description: Permission for big enderchest 
+    default: op
+  crate.command:
+    description: Permission nested for /crate
+    default: op
+  crate.command.create:
+    description: Permission for /crate create
+    default: op
+  crate.command.delete:
+    description: Permission for /crate delete
+    default: op
+  crate.command.give:
+    description: Permission for /crate edit
+    default: op
+  crate.command.edit:
+    description: Permission for /crate edit
+    default: op
+  crate.command.givekey:
+    description: Permission for /crate giveKey
+    default: op
+  crate.command.itemconfig:
+    description: Permission for /crate itemConfiguration
+    default: op
+  crate.break:
+    description: Permission for break tile
+    default: op
+  reclaim.command.create:
+    description: Permission for /reclaim create
+    default: op
+  reclaim.command.delete:
+    description: Permission for /reclaim delete
+    default: op
+  reclaim.command.edit:
+    description: Permission for /reclaim edit
+    default: op
+  pkg.command:
+    dafult: op

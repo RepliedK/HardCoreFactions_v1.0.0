@@ -11,7 +11,7 @@ use pocketmine\utils\Config;
 
 class DataProvider {
 
-    public Config $kothConfig, $claimConfig, $kitConfig, $reclaimConfig, $crateConfig, $packageConfig, $lootboxConfig;
+    public Config $kothConfig, $claimConfig, $kitConfig, $reclaimConfig, $crateConfig;
 
     public function __construct(){
         $plugin = HCFLoader::getInstance();
@@ -35,7 +35,6 @@ class DataProvider {
         $this->kothConfig = new Config($directory.'koths.yml', Config::YAML);
         $this->claimConfig = new Config($directory.'claims.yml', Config::YAML);
         $this->reclaimConfig = new Config($directory.'reclaims.yml', Config::YAML);
-        $this->packageConfig = new Config($directory.'package.yml', Config::YAML);
         $this->kitConfig = new Config($directory.'kits.yml', Config::YAML, ["organization" => [], "kits" => []]);
     }
 
@@ -47,12 +46,6 @@ class DataProvider {
         $this->saveKits();
         $this->saveReclaims();
         $this->saveCrates();
-        $this->savePackage();
-    }
-
-
-    public function getPackageConfig(): Config {
-        return $this->packageConfig;
     }
 
     public function getReclaimConfig(): Config {
@@ -73,15 +66,6 @@ class DataProvider {
 
     public function getCrateConfig(): Config {
         return $this->crateConfig;
-    }
-
-    public function getPackage(): array {
-        $items = [];
-        $data = $this->getPackageConfig();
-        foreach($data->getAll() as $slot => $item){
-            $items[$slot] = Serialize::deserialize($item);
-        }
-        return $items;
     }
 
 
@@ -164,16 +148,6 @@ class DataProvider {
             $crates[$name] = $data;
         }
         return $crates;
-    }
-
-    public function savePackage() : void {
-        $itemData = [];
-        $result = $this->getPackageConfig();
-        foreach(PackageManager::getPartnerPackage()->getItems() as $slot => $item){
-            $itemData[$slot] = Serialize::serialize($item);
-        }
-        $result->setAll($itemData);
-        $result->save();
     }
 
     public function saveCrates(): void {

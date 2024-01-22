@@ -196,9 +196,9 @@ class Koth
 
                 HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7███████"));
                 HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7███&3█&7█"));
-                HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7██&3█&7██ &r&7[&bKoth&7]"));
+                HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7██&3█&7██ &r&7[&bKoTHs&7]"));
                 HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3███&7███ &r&9" . $this->getName() . " &e has been captured by &6[&e" . $this->capturer->getSession()->getFaction() . "&6] " . $this->capturer->getName() . "&e!"));
-                HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7██&3█&7██ &r&7[&bKoth&7] &6[&e" . $this->capturer->getSession()->getFaction() . "&6] " . $this->capturer->getName() . "&e."));
+                HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7██&3█&7██ &r&7[&bKoTHs&7] &6[&e" . $this->capturer->getSession()->getFaction() . "&6] " . $this->capturer->getName() . "&e."));
                 HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7███&3█&7█"));
                 HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7███&3█&7█"));
                 HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7███████"));

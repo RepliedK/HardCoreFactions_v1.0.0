@@ -43,8 +43,17 @@ class TimerManager
         HCFLoader::getInstance()->getServer()->getCommandMap()->register('HCF', new SotwCommand());
         HCFLoader::getInstance()->getServer()->getCommandMap()->register('HCF', new PurgeCommand());
         HCFLoader::getInstance()->getServer()->getCommandMap()->register('HCF', new CustomTimerCommand());
-        # Register listener
         HCFLoader::getInstance()->getServer()->getPluginManager()->registerEvents(new TimerListener(), HCFLoader::getInstance());
+    }
+
+    public function update(): void {
+        $this->getSotw()->update();
+        $this->getEotw()->update();
+        $this->getPurge()->update();
+        foreach($this->getCustomTimers() as $name => $timer){
+            if($timer instanceof TimerCustom)
+                $timer->update();
+        }
     }
     
     /**

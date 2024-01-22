@@ -59,9 +59,9 @@ class StartSubCommand implements KothSubCommand
 
         HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7███████"));
         HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7███&3█&7█"));
-        HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7██&3█&7██ &r&7[&d&lLegacy KoTHs7]"));
+        HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7██&3█&7██ &r&7[&d&lKoTHs7]"));
         HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3███&7███ &r&9" . $koth->getName() . " &ehas been started &6" . $koth->getCoords() . "!"));
-        HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7██&3█&7██ &r&7[&d&lLegacy KoTHs&r&7] &ewin the event a get rewards"));
+        HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7██&3█&7██ &r&7[&d&lKoTHs&r&7] &ewin the event a get rewards"));
         HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7███&3█&7█"));
         HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7█&3█&7███&3█&7█"));
         HCFLoader::getInstance()->getServer()->broadcastMessage(TextFormat::colorize("&7███████"));
@@ -72,7 +72,7 @@ class StartSubCommand implements KothSubCommand
         $embed = new Embed();
         $embed->setTitle("KoTH Event - HCF");
         $embed->setColor(0xC13DFF);            
-        $embed->setDescription("The **$name** KoTH has been actived!!\n 🧱 Cordinates: **500 90 500**\n ⏳ Capture Time: **05:00**\n\n> IP: **legacymc.ddns.net**\n> Port: **19139**\n> Store: **https://store.legacymc.cc**");
+        $embed->setDescription("The **$name** KoTH has been actived!!\n 🧱 Cordinates: **500 90 500**\n ⏳ Capture Time: **05:00**");
         $embed->setFooter("KoTH Active");          
         $msg->addEmbed($embed);
         $webhook->send($msg);

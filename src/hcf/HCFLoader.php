@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace hcf;
 
-use CortexPE\DiscordWebhookAPI\Embed;
-use CortexPE\DiscordWebhookAPI\Message;
-use CortexPE\DiscordWebhookAPI\Webhook;
 use hcf\addons\AddonsManager;
 use hcf\entity\EntityManager;
 use hcf\claim\ClaimManager;
@@ -22,10 +19,8 @@ use hcf\database\DataProvider;
 use muqsit\invmenu\InvMenuHandler;
 use hcf\entity\custom\TextEntity;
 use hcf\handler\HandlerManager;
-use hcf\item\ItemManager;
 use hcf\module\ModuleManager;
 use hcf\timer\types\TimerCustom;
-use hcf\utils\logic\time\Timer;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\ClosureTask;
 use pocketmine\utils\TextFormat;
@@ -59,8 +54,6 @@ class HCFLoader extends PluginBase
     public DisconnectedManager $disconnectedManager;
     /** @var SessionManager */
     public SessionManager $sessionManager;
-    /** @var ItemManager */
-    public ItemManager $itemManager;
     /** @var ModuleManager */
     public ModuleManager $moduleManager;
     /** @var HandlerManager */
@@ -89,7 +82,6 @@ class HCFLoader extends PluginBase
         $this->kothManager = new KothManager;
         $this->disconnectedManager = new DisconnectedManager;
         $this->sessionManager = new SessionManager;
-        $this->itemManager = new ItemManager;
         $this->handlerManager = new HandlerManager;
         $this->addonsManager = new AddonsManager;
         
@@ -109,13 +101,7 @@ class HCFLoader extends PluginBase
             }
             
             # Events
-            $this->getTimerManager()->getSotw()->update();
-            $this->getTimerManager()->getEotw()->update();
-            $this->getTimerManager()->getPurge()->update();
-            foreach($this->getTimerManager()->getCustomTimers() as $name => $timer){
-                if($timer instanceof TimerCustom)
-                    $timer->update();
-            }
+            $this->getTimerManager()->update();
                 
             # Sessions
             foreach ($this->getSessionManager()->getSessions() as $session)
@@ -130,7 +116,7 @@ class HCFLoader extends PluginBase
     protected function onDisable(): void
     {
         $this->getProvider()->save();
-        $this->disconnectedManager->onDisable();
+        $this->getDisconnectedManager()->onDisable();
         $this->getHandlerManager()->getCrateManager()->onDisable();
         
         $world = $this->getServer()->getWorldManager()->getDefaultWorld();
@@ -229,11 +215,6 @@ class HCFLoader extends PluginBase
     public function getSessionManager(): SessionManager
     {
         return $this->sessionManager;
-    }
-
-    public function getItemManager(): ItemManager
-    {
-        return $this->itemManager;
     }
     
     public function getModuleManager(): ModuleManager 

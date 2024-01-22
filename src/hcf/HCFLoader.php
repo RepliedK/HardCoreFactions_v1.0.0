@@ -50,7 +50,7 @@ class HCFLoader extends PluginBase
     /** @var EnchantmentManager */
     public EnchantmentManager $enchantmentManager;
     /** @var TimerManager */
-    public TimerManager $TimerManager;
+    public TimerManager $timerManager;
     /** @var FactionManager */
     public FactionManager $factionManager;
     /** @var KothManager */
@@ -84,7 +84,7 @@ class HCFLoader extends PluginBase
         $this->claimManager = new ClaimManager;
         $this->commandManager = new CommandManager;
         $this->enchantmentManager = new EnchantmentManager;
-        $this->TimerManager = new TimerManager;
+        $this->timerManager = new TimerManager;
         $this->factionManager = new FactionManager;
         $this->kothManager = new KothManager;
         $this->disconnectedManager = new DisconnectedManager;
@@ -196,7 +196,7 @@ class HCFLoader extends PluginBase
      */
     public function getTimerManager(): TimerManager
     {
-        return $this->TimerManager;
+        return $this->timerManager;
     }
     
     /**

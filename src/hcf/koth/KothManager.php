@@ -6,8 +6,6 @@ namespace hcf\koth;
 
 use hcf\HCFLoader;
 use hcf\koth\command\KothCommand;
-use hcf\koth\task\AutoKothTask;
-use hcf\utils\logic\time\Timer;
 
 /**
  * Class KothManager
@@ -31,7 +29,6 @@ class KothManager
         # Register koths
         foreach (HCFLoader::getInstance()->getProvider()->getKoths() as $name => $data)
             $this->createKoth($name, (int)$data['time'], (int) $data['points'], $data['coords'], $data['claim'], $data['capzone']);
-        HCFLoader::getInstance()->getScheduler()->scheduleRepeatingTask(new AutoKothTask(), Timer::time("4h") * 20);
     }
     
     /**

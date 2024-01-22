@@ -457,10 +457,6 @@ class HCFListener implements Listener
         }
         if($item instanceof EnderPearl){
             $session = $player->getSession();
-            if ($player->getCurrentClaim() === 'Citadel'){
-                $player->sendMessage(TextFormat::colorize('&cYou can\'t use this in Citadel &cclaim.'));
-                return;
-            }
 
             if ($session->getCooldown('enderpearl') !== null) {
                 $player->sendMessage(TextFormat::colorize('&cYou have cooldown enderpearl'));

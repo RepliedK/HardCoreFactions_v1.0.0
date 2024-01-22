@@ -106,7 +106,7 @@ class ClaimListener implements Listener
             return;
         }
 
-        if (in_array($claim->getType(), ['spawn', 'road', 'koth', 'citadel', 'custom'])) {
+        if (in_array($claim->getType(), ['spawn', 'road', 'koth', 'custom'])) {
             $event->cancel();
             $player->sendMessage(TextFormat::colorize('&cYou cannot place blocks in this area'));
             return;
@@ -149,7 +149,7 @@ class ClaimListener implements Listener
             return;
         }
 
-        if (in_array($claim->getType(), ['spawn', 'road', 'koth', 'citadel', 'custom'])) {
+        if (in_array($claim->getType(), ['spawn', 'road', 'koth', 'custom'])) {
             $event->cancel();
             $player->sendMessage(TextFormat::colorize('&cYou cannot place blocks in this area'));
             return;
@@ -278,12 +278,6 @@ class ClaimListener implements Listener
         if ($item instanceof EnderPearl) {
             if ($action === PlayerInteractEvent::RIGHT_CLICK_BLOCK && $block instanceof FenceGate) {
                 $event->cancel();
-                $session = $player->getSession();
-
-                if ($player->getCurrentClaim() === 'Citadel') {
-                    $player->sendMessage(TextFormat::colorize('&cYou can\'t use this in Citadel &cclaim.'));
-                    return;
-                }
             }
         }
 

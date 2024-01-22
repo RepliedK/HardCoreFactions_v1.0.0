@@ -117,14 +117,10 @@ class HCFLoader extends PluginBase
     {
         $this->getProvider()->save();
         $this->getDisconnectedManager()->onDisable();
-        $this->getHandlerManager()->getCrateManager()->onDisable();
         
-        $world = $this->getServer()->getWorldManager()->getDefaultWorld();
-        foreach ($world->getEntities() as $entity) {
-            if ($entity instanceof CustomItemEntity){
-                if($entity instanceof TextEntity){
-                    $entity->close();
-                }
+        foreach ($this->getServer()->getWorldManager()->getDefaultWorld()->getEntities() as $entity) {
+            if ($entity instanceof CustomItemEntity || $entity instanceof TextEntity){
+                $entity->close();
             }
         }
     }

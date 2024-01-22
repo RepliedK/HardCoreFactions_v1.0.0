@@ -28,8 +28,6 @@ class Crate
     
     /** @var array */
     public array $floatingTexts = [];
-    /** @var array */
-    public array $floatingItems = [];
     
     /**
      * Crate construct.

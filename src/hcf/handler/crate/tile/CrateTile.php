@@ -117,17 +117,11 @@ class CrateTile extends Chest
             $crate = HCFLoader::getInstance()->getHandlerManager()->getCrateManager()->getCrate($this->getCrateName());
 
             if ($crate !== null) {
-                $menu = InvMenu::create(InvMenuTypeIds::TYPE_DOUBLE_CHEST);
+                $menu = InvMenu::create(InvMenuTypeIds::TYPE_CHEST);
                 $crateItems = $crate->getItems();
                 $contents = [];
                 foreach ($crateItems as $slot => $item) {
                     $contents[$slot] = $item;
-                }
-                for ($i = 0; $i < 54; $i++) {
-                    $glass = VanillaBlocks::STAINED_GLASS()->setColor(DyeColor::RED())->asItem()->setCustomName(" ");
-                    if($menu->getInventory()->getItem($i) == VanillaItems::AIR()){
-                        $menu->getInventory()->setItem($i, $glass);
-                    }
                 }   
                 $menu->getInventory()->setContents($contents);
                 $menu->setListener(function (InvMenuTransaction $transaction): InvMenuTransactionResult {

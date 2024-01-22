@@ -37,22 +37,6 @@ class CrateManager
         # Register crates
         foreach (HCFLoader::getInstance()->getProvider()->getCrates() as $name => $data)
             $this->addCrate($name, $data['key'], $data['keyFormat'], $data['nameFormat'], $data['items'] ?? []);
-        # Dumb 
-        $this->despawnEntities();
-    }
-    
-    public function onDisable(): void
-    {
-        $this->despawnEntities();
-    }
-    
-    private function despawnEntities(): void
-    {
-        foreach ($this->crates as $crate) {
-            foreach ($crate->floatingTexts as $text) {
-                $text->close();
-            }
-        }
     }
     
     /**

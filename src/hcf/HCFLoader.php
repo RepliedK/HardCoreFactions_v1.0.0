@@ -20,6 +20,7 @@ use muqsit\invmenu\InvMenuHandler;
 use hcf\entity\custom\TextEntity;
 use hcf\handler\HandlerManager;
 use hcf\module\ModuleManager;
+use hcf\player\disconnected\DisconnectedMob;
 use hcf\timer\types\TimerCustom;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\ClosureTask;
@@ -116,10 +117,8 @@ class HCFLoader extends PluginBase
     protected function onDisable(): void
     {
         $this->getProvider()->save();
-        $this->getDisconnectedManager()->onDisable();
-        
         foreach ($this->getServer()->getWorldManager()->getDefaultWorld()->getEntities() as $entity) {
-            if ($entity instanceof CustomItemEntity || $entity instanceof TextEntity){
+            if ($entity instanceof CustomItemEntity || $entity instanceof TextEntity ||$entity instanceof DisconnectedMob){
                 $entity->close();
             }
         }

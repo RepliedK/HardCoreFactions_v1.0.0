@@ -25,20 +25,6 @@ class DisconnectedManager
         EntityFactory::getInstance()->register(DisconnectedMob::class, function(World $world, CompoundTag $nbt): DisconnectedMob {
             return new DisconnectedMob(EntityDataHelper::parseLocation($nbt, $world), $nbt);
         }, ['DisconnectedMob', 'hcf:disconnectedmob'], EntityIds::VILLAGER);
-        $this->despawnMobs();
-    }
-    
-    public function onDisable(): void
-    {
-        $this->despawnMobs();
-    }
-    
-    private function despawnMobs(): void
-    {
-        foreach (Server::getInstance()->getWorldManager()->getDefaultWorld()->getEntities() as $entity) {
-            if ($entity instanceof DisconnectedMob)
-                $entity->flagForDespawn();
-        }
     }
     
     /**

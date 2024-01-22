@@ -174,35 +174,38 @@ class Player extends BasePlayer
         # Claims
         if ($this->getCurrentClaim() !== null) {
             $currentClaim = HCFLoader::getInstance()->getClaimManager()->getClaim($this->getCurrentClaim());
-            if ($currentClaim !== null) {
-                $claimName = '&c' . $this->getCurrentClaim();
-
-                if ($currentClaim->getType() === 'spawn') {
-                    $claimName = '&a' . $this->getCurrentClaim();
-                    $lines[] = TextFormat::colorize(' &l&eBalance&r&7: &a$'. $this->getSession()->getBalance());
-                } elseif ($currentClaim->getType() === 'road'){
-                    $claimName = '&6' . $this->getCurrentClaim();
-                }elseif ($currentClaim->getType() === 'koth'){
-                    $claimName = '&9KoTH ' . $this->getCurrentClaim();
-                }
-                
-                $lines[] = TextFormat::colorize(' &l&4Claim&r&7: '. $claimName);
+            if ($currentClaim === null) {
+                $lines[] = TextFormat::colorize(' &l&4Claim&r&7: &c'. ($this->getPosition()->distance($this->getWorld()->getSafeSpawn()) > 400 ? 'Wilderness' : 'Warzone'));
+                return;
             }
-        }else{
-            $lines[] = TextFormat::colorize(' &l&4Claim&r&7: &c'. ($this->getPosition()->distance($this->getWorld()->getSafeSpawn()) > 400 ? 'Wilderness' : 'Warzone'));
+            $claimName = $this->getCurrentClaim();
+            $colorClaimMatch = match($currentClaim->getType()){
+                "spawn" => "&a{$claimName}",
+                "road" => "&e{$claimName}",
+                "koth" => "&9KoTH {$claimName}",
+                default => "&c{$claimName}",
+            };
+            $lines[] = TextFormat::colorize(' &l&4Claim&r&7: '. $colorClaimMatch);
         }
         
         # Events
-        if (($sotw = HCFLoader::getInstance()->getTimerManager()->getSotw())->isActive())
+        $timerManager = HCFLoader::getInstance()->getTimerManager();
+        if (($sotw = $timerManager->getSotw())->isActive()) {
             $lines[] = TextFormat::colorize(' ' . $sotw->getFormat() . Timer::format($sotw->getTime()));
-        if (($eotw = HCFLoader::getInstance()->getTimerManager()->getEotw())->isActive())
+        }
+        if (($eotw = $timerManager->getEotw())->isActive()) {
             $lines[] = TextFormat::colorize(' ' . $eotw->getFormat() . Timer::format($eotw->getTime()));
-        if (($purge = HCFLoader::getInstance()->getTimerManager()->getPurge())->isActive())
+        }
+        if (($purge = $timerManager->getPurge())->isActive()) {
             $lines[] = TextFormat::colorize(' ' . $purge->getFormat() . Timer::format($purge->getTime()));
-        foreach(HCFLoader::getInstance()->getTimerManager()->getCustomTimers() as $name => $timer){
-            if(!$timer instanceof TimerCustom) return;
-            if (($custom = HCFLoader::getInstance()->getTimerManager()->getCustomTimerByName($name))->isActive())
+        }
+        foreach ($timerManager->getCustomTimers() as $name => $timer) {
+            if (!($timer instanceof TimerCustom)) {
+                continue;
+            }
+            if (($custom = $timerManager->getCustomTimerByName($name))->isActive()) {
                 $lines[] = TextFormat::colorize(' ' . $custom->getFormat() . Timer::format($custom->getTime()));
+            }
         }
         # Koth
         if (($kothName = HCFLoader::getInstance()->getKothManager()->getKothActive()) !== null) {
@@ -228,7 +231,7 @@ class Player extends BasePlayer
             # Focus
             if ($faction->getFocus() !== null) {
                 if (($targetFaction = HCFLoader::getInstance()->getFactionManager()->getFaction($faction->getFocus())) !== null) {
-                    $lines[] = TextFormat::colorize('&r&7');
+                    $lines[] = TextFormat::colorize('&r&7'.HCFLoader::getInstance()->getConfig()->get('scoreboard.placeholder'));
                     $lines[] = TextFormat::colorize(' &l&dTeam&r&7: &e' . $targetFaction->getName());
                     $lines[] = TextFormat::colorize(' &l&dHQ&r&7: &e' . ($targetFaction->getHome() !== null ? $targetFaction->getHome()->getFloorX() . ', ' . $targetFaction->getHome()->getFloorZ() : 'Has no home'));
                     $lines[] = TextFormat::colorize(' &l&dDTR&r&7: &e' . $targetFaction->getDtr() . ' &c■');
@@ -238,13 +241,11 @@ class Player extends BasePlayer
             
             # Rally
             if (($rally = $faction->getRally()) !== null) {
-                $lines[] = TextFormat::colorize('&r&7');
+                $lines[] = TextFormat::colorize('&r&7'.HCFLoader::getInstance()->getConfig()->get('scoreboard.placeholder'));
                 $lines[] = TextFormat::colorize(' &l&dRally&r&7: &e' . $rally[0]);
                 $lines[] = TextFormat::colorize(' &l&dXYZ&r&7: &e' . $rally[1]->getPosition()->getFloorX() . ', ' . $rally[1]->getPosition()->getFloorY() . ', ' . $rally[1]->getPosition()->getFloorZ());
             }
         }
-        $lines[] = TextFormat::colorize('&r&7 ');
-        $lines[] = TextFormat::colorize('&r&7 play.vaultmc.cc');
         $lines[] = TextFormat::colorize('&7&7'.HCFLoader::getInstance()->getConfig()->get('scoreboard.placeholder'));
 
         if (count($lines) === 3) {

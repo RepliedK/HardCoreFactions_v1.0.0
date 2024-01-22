@@ -22,11 +22,13 @@ class PlayerScoreboard
     
     /** @var string */
     private string $title;
+
     /** @var ScorePacketEntry[] */
     private array $lines;
     
     /** @var bool */
-    private bool $spawned;   
+    private bool $spawned;
+
     /** @var Player */
     private Player $player;
     
@@ -138,4 +140,5 @@ class PlayerScoreboard
         $this->getPlayer()->getNetworkSession()->sendDataPacket($pk);
         $this->lines = [];
     }
+    
 }

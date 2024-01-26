@@ -25,7 +25,6 @@ class CompassManager implements Listener
         BossBarTracker::init(HCFLoader::getInstance());
         HCFLoader::getInstance()->getServer()->getPluginManager()->registerEvents($this, HCFLoader::getInstance());
         $this->bars = new \SplFixedArray(360 + 1);
-
         $bar = [];
         foreach([
                     "&8|&r&eN&r&8|&r",
@@ -57,7 +56,6 @@ class CompassManager implements Listener
      */
     public function onMove(PlayerMoveEvent $ev): void {
         $p = $ev->getPlayer();
-        //$p->sendPopup("YAW: " . ceil($p->getYaw()) . " DIRECTION: " . $p->getDirection());
         if(isset($this->bossbars[($k = $p->getName())])) {
             ($bb = $this->bossbars[$k])->setTitle($this->renderFor($p), false);
             $bb->updateFor($p);

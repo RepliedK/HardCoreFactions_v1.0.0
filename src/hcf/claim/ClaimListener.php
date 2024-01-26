@@ -292,12 +292,11 @@ class ClaimListener implements Listener
             if (!HCFLoader::getInstance()->getTimerManager()->getEotw()->isActive() && $player->getSession()->getFaction() !== $claim->getName() && $claim->getType() !== 'spawn') {
                 $faction = HCFLoader::getInstance()->getFactionManager()->getFaction($claim->getName());
 
-                if ($faction !== null && $faction->getDtr() > 0.00 && !HCFLoader::getInstance()->getTimerManager()->getPurge()->isActive()) {
+                if ($faction !== null && $faction->getDtr() > 0.00) {
                     $event->cancel();
                 
                     if ($action === PlayerInteractEvent::RIGHT_CLICK_BLOCK) {
                         if ($block instanceof FenceGate) {
-                            if(HCFLoader::getInstance()->getTimerManager()->getPurge()->isActive()) return;
                             $distance = $player->getPosition()->distance($block->getPosition());
 
                             if ($distance <= 3 && !$block->isOpen()) {

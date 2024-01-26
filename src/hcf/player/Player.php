@@ -196,9 +196,6 @@ class Player extends BasePlayer
         if (($eotw = $timerManager->getEotw())->isActive()) {
             $lines[] = TextFormat::colorize(' ' . $eotw->getFormat() . Timer::format($eotw->getTime()));
         }
-        if (($purge = $timerManager->getPurge())->isActive()) {
-            $lines[] = TextFormat::colorize(' ' . $purge->getFormat() . Timer::format($purge->getTime()));
-        }
         foreach ($timerManager->getCustomTimers() as $name => $timer) {
             if (!($timer instanceof TimerCustom)) {
                 continue;

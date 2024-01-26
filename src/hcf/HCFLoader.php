@@ -102,7 +102,7 @@ class HCFLoader extends PluginBase
             }
             
             # Events
-            $this->getTimerManager()->update();
+            $this->getTimerManager()->onUpdate();
                 
             # Sessions
             foreach ($this->getSessionManager()->getSessions() as $session)

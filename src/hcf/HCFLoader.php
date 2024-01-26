@@ -15,7 +15,7 @@ use hcf\faction\FactionManager;
 use hcf\koth\KothManager;
 use hcf\player\disconnected\DisconnectedManager;
 use hcf\session\SessionManager;
-use hcf\database\DataProvider;
+use hcf\provider\DataProvider;
 use muqsit\invmenu\InvMenuHandler;
 use hcf\entity\custom\TextEntity;
 use hcf\handler\HandlerManager;

@@ -405,7 +405,6 @@ class HCFListener implements Listener
      */
     public function handleQuit(PlayerQuitEvent $event): void
     {
-        /** @var Player */
         $player = $event->getPlayer();
 
         if (!$player instanceof Player)
@@ -444,7 +443,6 @@ class HCFListener implements Listener
                 $projectile->flagForDespawn();
                 return;
             }
-
             $projectile->spawnToAll();
             $item->pop();
             $player->getInventory()->setItemInHand($item);
@@ -452,17 +450,14 @@ class HCFListener implements Listener
         }
         if($item instanceof EnderPearl){
             $session = $player->getSession();
-
             if ($session->getCooldown('enderpearl') !== null) {
                 $player->sendMessage(TextFormat::colorize('&cYou have cooldown enderpearl'));
                 $event->cancel();
                 return;
             }
             $location = $player->getLocation();
-
             $projectile = new EnderpearlEntity(Location::fromObject($player->getEyePos(), $player->getWorld(), $location->yaw, $location->pitch), $player);
             $projectile->setMotion($player->getDirectionVector()->multiply($item->getThrowForce() * 1.4));
-
             $projectileEv = new ProjectileLaunchEvent($projectile);
             $projectileEv->call();
             if($projectileEv->isCancelled()){

@@ -289,6 +289,7 @@ class ClaimListener implements Listener
             return;
             
         if (!$block instanceof Sign) {
+            if($claim->getType() === 'spawn') $event->cancel();
             if (!HCFLoader::getInstance()->getTimerManager()->getEotw()->isActive() && $player->getSession()->getFaction() !== $claim->getName() && $claim->getType() !== 'spawn') {
                 $faction = HCFLoader::getInstance()->getFactionManager()->getFaction($claim->getName());
 
@@ -327,134 +328,125 @@ class ClaimListener implements Listener
      * @param PlayerMoveEvent $event
      * @throws WorldException
      */
-    public function handleMove(PlayerMoveEvent $event): void
-    {
+    public function handleMove(PlayerMoveEvent $event): void {
         /** @var Player $player */
         $player = $event->getPlayer();
-        $claim = HCFLoader::getInstance()->getClaimManager()->insideClaim($player->getPosition());
+        $claimManager = HCFLoader::getInstance()->getClaimManager();
 
-        $leaving = self::DEATHBAN;
-        $entering = self::DEATHBAN;
-
-        if ($event->isCancelled())
-            return;
-        if (!$this->isBorderLimit($player->getPosition())) {
-            $player->teleport($this->correctPosition($player->getPosition()));
-        }
-
-        if ($claim === null) {
-            if ($player->getCurrentClaim() !== null) {
-                $currentClaim = HCFLoader::getInstance()->getClaimManager()->getClaim($player->getCurrentClaim());
-                $leavingName = '&c' . $player->getCurrentClaim();
-
-                if ($currentClaim !== null) {
-                    if ($currentClaim->getType() === 'spawn') {
-                        $leaving = self::NO_DEATHBAN;
-                        $leavingName = '&a' . $player->getCurrentClaim();
-
-                        if ($player->getSession()->getCooldown('pvp.timer') !== null && $player->getSession()->getCooldown('pvp.timer')->isPaused())
-                            $player->getSession()->getCooldown('pvp.timer')->setPaused(false);
-                    } elseif ($currentClaim->getType() === 'road') {
-                        $leavingName = '&6' . $player->getCurrentClaim();
-                    }elseif ($currentClaim->getType() === 'koth'){
-                        $leavingName = '&9KoTH ' . $player->getCurrentClaim();
-                    }
-                }
-                $player->sendMessage(TextFormat::colorize('&eNow leaving: ' . $leavingName . ' ' . $leaving));
-                $player->sendMessage(TextFormat::colorize('&eNow entering:&c ' . ($player->getPosition()->distance($player->getWorld()->getSafeSpawn()) > 400 ? 'Wilderness' : 'Warzone') . ' ' . $entering));
-
-                $player->setCurrentClaim();
-            }
+        if ($event->isCancelled()) {
             return;
         }
 
-        if ($player->getCurrentClaim() !== null && $claim->getName() === $player->getCurrentClaim())
-            return;
+        $this->checkAndTeleportToBorder($player);
 
-        if ($player->getCurrentClaim() !== null) {
-            $currentClaim = HCFLoader::getInstance()->getClaimManager()->getClaim($player->getCurrentClaim());
+        $currentClaim = $claimManager->getClaim($player->getCurrentClaim());
+        $newClaim = $claimManager->insideClaim($player->getPosition());
 
-            if ($currentClaim !== null) {
-                $leaving = self::NO_DEATHBAN;
-                $leavingName = '&a' . $player->getCurrentClaim();
-
-                if ($currentClaim->getType() === 'spawn') {
-                    if ($player->getSession()->getCooldown('pvp.timer') !== null && $player->getSession()->getCooldown('pvp.timer')->isPaused())
-                        $player->getSession()->getCooldown('pvp.timer')->setPaused(false);
-                } elseif ($currentClaim->getType() === 'road') {
-                    $leavingName = '&6' . $player->getCurrentClaim();
-                } elseif ($currentClaim->getType() === 'koth'){
-                    $leavingName = '&9KoTH ' . $player->getCurrentClaim();
-                }
-                $player->sendMessage(TextFormat::colorize('&eNow leaving: ' . $leavingName . ' ' . $leaving));
-            }
-        }
-        $enteringName = '&c' . $claim->getName();
-
-        if ($claim->getType() === 'spawn') {
-            $entering = self::NO_DEATHBAN;
-            $enteringName = '&a' . $claim->getName();
-
+        if ($currentClaim->getType() === 'spawn') {
             if ($player->getSession()->getCooldown('spawn.tag') !== null) {
                 $event->cancel();
                 return;
             }
-
-            if ($player->getSession()->getCooldown('pvp.timer') !== null && !$player->getSession()->getCooldown('pvp.timer')->isPaused())
-                $player->getSession()->getCooldown('pvp.timer')->setPaused(true);
-        } elseif ($claim->getType() === 'road'){
-            $enteringName = '&6' . $claim->getName();
-        }elseif ($claim->getType() === 'koth'){
-            $enteringName = '&9KoTH ' . $claim->getName();
-        }else {
+        }else{
             if ($player->getSession()->getCooldown('pvp.timer') !== null) {
                 $event->cancel();
                 return;
             }
-
-            if ($player->getSession()->getCooldown('starting.timer') !== null && $player->getSession()->getFaction() !== $claim->getName()) {
+            if ($player->getSession()->getCooldown('starting.timer') !== null && $player->getSession()->getFaction() !== $currentClaim->getName()) {
                 $event->cancel();
                 return;
             }
         }
+
+        $this->handleClaimChanges($player, $currentClaim, $newClaim, self::DEATHBAN, self::DEATHBAN);
+    }
+
+    private function checkAndTeleportToBorder(Player $player): void {
+        $border = 1300;
+        $position = $player->getPosition();
+
+        $x = match (true) {
+            $position->getFloorX() <= -$border => $position->getFloorX() + 4,
+            $position->getFloorX() >= $border => $position->getFloorX() - 4,
+            default => $position->getFloorX(),
+        };
+
+        $z = match (true) {
+            $position->getFloorZ() <= -$border => $position->getFloorZ() + 4,
+            $position->getFloorZ() >= $border => $position->getFloorZ() - 4,
+            default => $position->getFloorZ(),
+        };
+
+        $player->teleport(new Vector3($x, 72, $z));
+    }
+
+    private function handleClaimChanges(Player $player, ?Claim $currentClaim, ?Claim $newClaim, string &$leaving, string &$entering): void {
+        if ($currentClaim === null) {
+            $this->handleLeavingClaim($player, '', $leaving);
+        } elseif ($newClaim === null) {
+            $this->handleLeavingClaim($player, $currentClaim, $leaving);
+        } elseif ($player->getCurrentClaim() !== null && $newClaim->getName() === $player->getCurrentClaim()) {
+            return;
+        } else {
+            $this->handleLeavingClaim($player, $currentClaim, $leaving);
+            $this->handleEnteringClaim($player, $newClaim, $entering);
+        }
+
+        $player->setCurrentClaim($newClaim !== null ? $newClaim->getName() : null);
+    }
+
+    private function handleLeavingClaim(Player $player, Claim|string $claim, string &$leaving): void
+    {
+        if ($player->getCurrentClaim() !== null) {
+            $currentClaim = $claim instanceof Claim ? $claim : HCFLoader::getInstance()->getClaimManager()->getClaim($player->getCurrentClaim());
+            $leavingName = $this->getClaimDisplayName($currentClaim);
+
+            if ($currentClaim->getType() === 'spawn') {
+                $leaving = self::NO_DEATHBAN;
+            }
+
+            $player->sendMessage(TextFormat::colorize('&eNow leaving: ' . $leavingName . ' ' . $leaving));
+        }
+    }
+
+    private function handleEnteringClaim(Player $player, Claim $claim, string &$entering): void
+    {
+        $enteringName = $this->getClaimDisplayName($claim);
+
+        if ($claim->getType() === 'spawn') {
+            $entering = self::NO_DEATHBAN;
+
+            if ($player->getSession()->getCooldown('pvp.timer') !== null && !$player->getSession()->getCooldown('pvp.timer')->isPaused()) {
+                $player->getSession()->getCooldown('pvp.timer')->setPaused(true);
+            }
+        }
+
         $player->sendMessage(TextFormat::colorize('&eNow entering: ' . $enteringName . ' ' . $entering));
         $player->sendMessage(TextFormat::colorize('&eNow leaving:&c ' . ($player->getPosition()->distance($player->getWorld()->getSafeSpawn()) > 400 ? 'Wilderness' : 'Warzone') . ' ' . $entering));
-        $player->setCurrentClaim($claim->getName());
     }
 
-    protected function isBorderLimit(Vector3 $position): bool
+    private function getClaimDisplayName(Claim|string $claim): string
     {
-        $border = 1300;
-        return $position->getFloorX() >= -$border && $position->getFloorX() <= $border && $position->getFloorZ() >= -$border && $position->getFloorZ() <= $border;
+        $displayName = '';
+        if ($claim instanceof Claim) {
+            switch ($claim->getType()) {
+                case 'spawn':
+                    $displayName = '&a' . $claim->getName();
+                    break;
+                case 'road':
+                    $displayName = '&6' . $claim->getName();
+                    break;
+                case 'koth':
+                    $displayName = '&9KoTH ' . $claim->getName();
+                    break;
+                default:
+                    $displayName = '&c' . $claim->getName();
+                    break;
+            }
+        }
+        return $displayName;
     }
 
-    protected function correctPosition(Vector3 $position): Vector3
-    {
-        $border = 1300;
-
-        $x = $position->getFloorX();
-        $y = $position->getFloorY();
-        $z = $position->getFloorZ();
-
-        $xMin = -$border;
-        $xMax = $border;
-
-        $zMin = -$border;
-        $zMax = $border;
-
-        if ($x <= $xMin) {
-            $x = $xMin + 4;
-        } elseif ($x >= $xMax) {
-            $x = $xMax - 4;
-        }
-        if ($z <= $zMin) {
-            $z = $zMin + 4;
-        } elseif ($z >= $zMax) {
-            $z = $zMax - 4;
-        }
-        $y = 72;
-        return new Vector3($x, $y, $z);
-    }
 
     /**
      * @param PlayerQuitEvent $event

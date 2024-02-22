@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace hcf\database;
+namespace hcf\provider;
 
 use hcf\HCFLoader;
 use hcf\provider\DataProvider;

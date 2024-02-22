@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace hcf\provider;
 
-use hcf\database\DataSaver;
 use hcf\HCFLoader;
 use hcf\utils\logic\serialize\Serialize;
 use hcf\module\package\PackageManager;
